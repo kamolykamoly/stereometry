@@ -583,6 +583,115 @@
   .exrng{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:.92rem}
   .exb .chips{margin:0}
   .exb .chip:not([aria-pressed="true"]){background:var(--card)}
+
+  /* ===== мобильная версия: ничего не лежит поверх чертежа ===== */
+  html { -webkit-text-size-adjust: 100%; }
+  button, .tabs a, .chip, .dot { -webkit-tap-highlight-color: transparent; }
+
+  /* игра: верхняя строка (задание + закрыть) не накладывается */
+  .gm { height: 100vh; height: 100dvh; overscroll-behavior: contain; }
+  .gtop { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: start; min-height: 0; }
+  .gpill { max-width: none; justify-self: stretch; text-align: left; border-radius: 14px; padding: 8px 12px; font-size: .92rem; font-weight: 600; line-height: 1.35; }
+  .gpill .gn { display: block; font-family: var(--f-mono); font-size: .76rem; font-weight: 600; color: var(--muted); }
+  .gx { position: static; }
+  @media (min-width: 641px) { .gpill { justify-self: center; text-align: center; max-width: min(760px, 100%); } }
+
+  @media (max-width: 640px) {
+    /* компактная шапка: на телефоне чертёж должен быть на первом экране */
+    header .kicker, header .lead, header .cube { display: none; }
+    header .hero { padding-block: 10px 8px; }
+    header h1 { font-size: 1.3rem; letter-spacing: -0.01em; }
+    main { padding-block: 14px 40px; }
+    h2 { font-size: 1.35rem; }
+    .sub { margin-bottom: 14px; font-size: .95rem; }
+    .panel { padding: 14px; }
+    .th { margin-top: 28px; }
+    .node { gap: 12px; padding: 10px 12px; }
+    .node .ic { width: 60px; height: 60px; }
+    .node .nt { min-width: 0; }
+    .node b { font-size: 1.05rem; overflow-wrap: anywhere; hyphens: auto; }
+    .type { gap: 12px; padding: 12px; }
+    .type .ic { width: 56px; height: 56px; }
+    .type > :not(.ic) { min-width: 0; overflow-wrap: anywhere; }
+
+    /* навигация: полоска прокручивается, край подсвечен */
+    .tabs::after { content: ""; position: absolute; right: 0; top: 0; bottom: 0; width: 28px; background: linear-gradient(90deg, transparent, var(--bg)); pointer-events: none; }
+    .tabs .wrap { padding-inline: 6px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .tabs .wrap::-webkit-scrollbar { display: none; }
+    .tabs .wrap::after { content: ""; flex: none; width: 24px; }
+    .tabs a { padding: 13px 12px; font-size: .98rem; }
+    .exbar { top: calc(50px + env(safe-area-inset-top, 0px)); }
+
+    /* поля ввода: 16px, чтобы iOS не увеличивал страницу при фокусе */
+    input[type="text"], .ctl select, .egeh input { font-size: 16px; }
+
+    /* главная */
+    .home-hero { padding-block: 12px 4px; gap: 18px; }
+    .home-hero .actions .btn { flex: 1 1 100%; text-align: center; }
+    .hcap { position: static; margin-top: 6px; }
+
+    /* игра: больше места чертежу */
+    .gm { gap: 8px; padding-top: max(8px, env(safe-area-inset-top, 0px)); }
+    .gm:not(.wl) { grid-template-rows: auto minmax(180px, 1fr) auto auto auto; }
+    .gx { padding: 8px 12px; }
+    .gcard { padding: 10px 14px; border-radius: 14px; max-height: 38vh; max-height: 38svh; overflow-y: auto; }
+    .gcard b { font-size: 1rem; }
+    .gcard p { font-size: .88rem; line-height: 1.4; margin-top: 2px; }
+    .gg { font-size: .85rem; padding: 5px 9px; margin-bottom: 6px; }
+    .gcard .actions { margin-top: 8px; flex-wrap: nowrap; }
+    .gcard .actions .btn { flex: 1 1 0; min-width: 0; }
+    .gcard .opts .chip { font-size: .95rem; padding: 9px 14px; }
+    .gdots { gap: 4px; }
+    .gdots button { flex: 1 1 12px; max-width: 24px; width: auto; height: 18px; }
+  }
+
+  /* игра в альбомной ориентации: чертёж и точки слева, задание справа */
+  @media (max-height: 520px) and (orientation: landscape) {
+    .gm:not(.wl) { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); grid-template-rows: auto auto minmax(0, 1fr) auto; grid-template-areas: "cv top" "cv sl" "cv card" "dots card"; column-gap: 14px; row-gap: 8px; }
+    .gm:not(.wl) .gtop { grid-area: top; }
+    .gm:not(.wl) #gc { grid-area: cv; }
+    .gm:not(.wl) .gs { grid-area: sl; width: 100%; }
+    .gm:not(.wl) .gcard { grid-area: card; width: 100%; max-height: none; overflow-y: auto; min-height: 0; align-self: stretch; }
+    .gm:not(.wl) .gdots { grid-area: dots; }
+    .gm:not(.wl) .gpill { justify-self: stretch; text-align: left; max-width: none; font-size: .85rem; padding: 6px 10px; }
+    .gm:not(.wl) .gx { padding: 6px 10px; }
+  }
+
+  /* 3D-модели: переключатели и сведения вне чертежа */
+  @media (max-width: 860px) {
+    #view-models .stage { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "tb tb" "cv cv" "inf rs"; gap: 8px 10px; align-items: start; }
+    #view-models .stage .c3 { grid-area: cv; height: clamp(300px, 54vh, 540px); height: clamp(300px, 54svh, 540px); }
+    #view-models .tb { grid-area: tb; position: static; max-width: none; gap: 6px; }
+    #view-models .tg { padding: 7px 12px; font-size: .85rem; }
+    #m-reset { grid-area: rs; position: static; }
+    #m-info { grid-area: inf; position: static; font-size: .86rem; }
+  }
+
+  /* построения: компактно, подсказки и кнопки не лежат на чертеже */
+  @media (max-width: 900px) {
+    #view-build .bhead { align-items: center; gap: 8px 12px; margin-bottom: 8px; }
+    #view-build .bhead .sub { display: none; }
+    #view-build .bhead h2 { margin: 0; }
+    .seg button { padding: 8px 14px; }
+    .btools { gap: 2px 0; margin-bottom: 8px; }
+    .bgrp { width: 100%; }
+    .bgrp .chip { padding: 8px 14px; }
+    .bq { padding: 10px 14px; }
+    .bq .q { font-size: 1rem; }
+    .bq .ptop { margin-bottom: 6px; }
+    #view-build .bmain { grid-template-columns: minmax(0, 1fr); }
+    #view-build .stage { min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "cv cv" "ht vw"; gap: 6px 10px; align-items: center; }
+    #view-build .stage .c3 { grid-area: cv; }
+    #view-build .bhint { grid-area: ht; position: static; max-width: none; padding: 0; background: none; font-size: .78rem; }
+    #view-build .bview { grid-area: vw; position: static; padding: 7px 12px; }
+    .bact { bottom: calc(8px + env(safe-area-inset-bottom, 0px)); padding: 8px; gap: 6px; }
+    .bact > .btn { flex: 1 1 0; min-width: 0; padding: 10px 8px; font-size: .9rem; }
+    .bact .sec { flex: 1 1 100%; flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; }
+    .bact .sec::-webkit-scrollbar { display: none; }
+    .bact .blnk { flex: none; white-space: nowrap; padding: 8px 10px; }
+    .bform { flex: 1 1 100%; }
+    .bform input[type="text"] { flex: 1 1 0; min-width: 0; width: auto; }
+  }
 </style>
 
 </head>
@@ -1277,7 +1386,7 @@
   }
   function start(i) {
     li = i; lv = Lc.lv[i]; sel = []; ok = false; hn = 0; E.pts = []; E.segs = []; E.fill = null; E.yaw = .7; E.pit = .45;
-    $('gs').hidden = lv.k !== 's'; nxt(); gm.querySelector('[data-prev]').hidden = !li; $('gp').textContent = (li + 1) + '/' + Lc.lv.length + (S.lv[lv.id] ? ' ✓ уже решено' : '') + ' · ' + lv.q; $('go').innerHTML = '';
+    $('gs').hidden = lv.k !== 's'; nxt(); gm.querySelector('[data-prev]').hidden = !li; (function () { var gp = $('gp'), sn = document.createElement('span'); sn.className = 'gn'; sn.textContent = 'Задание ' + (li + 1) + ' из ' + Lc.lv.length + (S.lv[lv.id] ? ' · ✓ уже решено' : ''); gp.textContent = ''; gp.appendChild(sn); gp.appendChild(document.createTextNode(lv.q)); })(); $('go').innerHTML = '';
     if (lv.k === 'q' || lv.k === 'c') {
       E.pts = VT.map(function (v, k) { return { p: v, l: sd(NM[k]), n: NM[k] }; }); hlp(lv.hl);
       if (lv.k === 'q') say('Что нужно сделать', 'Нажми на ' + pl(lv.n, ['вершину', 'вершины', 'вершин']) + ' куба, которые подходят под условие. Нажми на выбранную вершину ещё раз, чтобы снять выбор. Когда выберешь нужное число, ответ проверится сам.' + (lv.hl ? ' Оранжевым на чертеже показано то, о чём спрашивается.' : '') + ' Куб можно вращать.');
@@ -1748,8 +1857,10 @@
       if (links[i].getAttribute('data-view') === h) links[i].setAttribute('aria-current', 'page');
       else links[i].removeAttribute('aria-current');
     }
+    var act = document.querySelector('.tabs a[aria-current="page"]');
+    if (act) { var box = act.parentNode, ar = act.getBoundingClientRect(), br = box.getBoundingClientRect(); box.scrollLeft += (ar.left + ar.width / 2) - (br.left + br.width / 2); }
   }
-  window.addEventListener('hashchange', showView);
+  window.addEventListener('hashchange', function () { showView(); window.scrollTo(0, 0); });
 
   renderProblem();
   renderStats();
