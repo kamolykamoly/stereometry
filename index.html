@@ -692,6 +692,19 @@
     .bform { flex: 1 1 100%; }
     .bform input[type="text"] { flex: 1 1 0; min-width: 0; width: auto; }
   }
+
+  /* главная на телефоне: вращающаяся фигура сверху, видна сразу без прокрутки */
+  @media (max-width: 860px) {
+    .home-hero .hstage { order: -1; }
+    .hstage .c3 { height: clamp(240px, 38vh, 380px); height: clamp(240px, 38svh, 380px); }
+  }
+  @media (max-width: 640px) {
+    .home-hero { gap: 12px; padding-block: 10px 4px; }
+    .home-hero .kicker { display: none; }
+    .home-hero h1 { font-size: clamp(1.7rem, 8vw, 2.2rem); }
+    .home-hero .lead { font-size: .98rem; margin-top: 10px; }
+    .home-hero .actions { margin-top: 14px; }
+  }
 </style>
 
 </head>
@@ -3111,6 +3124,7 @@
   }
   function kick() { if (!running && document.body.classList.contains('is-home')) { running = true; requestAnimationFrame(frame); } }
   window.addEventListener('hashchange', function () { setTimeout(kick, 0); });
+  window.addEventListener('pageshow', kick); window.addEventListener('load', kick); window.addEventListener('resize', kick); window.addEventListener('orientationchange', kick);
   cv.addEventListener('click', function () { var tt = (performance.now() - t0) / 1000 + off; off += DUR - tt % DUR; });
   setTimeout(kick, 0);
 })();
